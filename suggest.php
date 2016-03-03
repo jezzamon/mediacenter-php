@@ -59,7 +59,7 @@ include("inc/header.php");
 <!--				honeypot for bots spam, won't be shown in browser-->
 				<tr style="display:none">
 					<th><label for="address">Address </label></th>
-					<td><input type="text" name="details" id="address"></input></td>
+					<td><input type="text" name="address" id="address"></input></td>
 					<p>Please leave this field blank</p>
 				</tr>
 				
