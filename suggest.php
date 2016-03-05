@@ -25,10 +25,20 @@ if  ($_SERVER["REQUEST_METHOD"] == "POST") {
 	}
     
     //require phpmailer
+    require("inc/phpmailer/PHPMailerAutoload.php");
     require("inc/phpmailer/class.phpmailer.php");
+    require("inc/phpmailer/class.smtp.php");
     
     $mail = new PHPMailer;
-    
+    //set up SMTP
+    $mail->isSMTP();                                      // Set mailer to use SMTP
+    $mail->Host = 'smtp.postmarkapp.com';  // Specify main and backup SMTP servers
+    $mail->SMTPAuth = true;                               // Enable SMTP authentication
+    $mail->Username = 'df6f5a3b-8dc6-4652-a465-e8bf94ae7d26';  // SMTP username (postmark api token)
+    $mail->Password = 'df6f5a3b-8dc6-4652-a465-e8bf94ae7d26';  // SMTP password
+//    $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
+    $mail->Port = 587;  
+ 
     //ValidateAddress() returns true or false
         //check if ValidateAddress is NOT(!) true 
     if (!$mail->ValidateAddress($email)) {
@@ -36,15 +46,36 @@ if  ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
     
-	echo "<pre>";
+	
 	$email_body = "";
 	$email_body .= "Name " . $name . "\n";
 	$email_body .= "Email " . $email . "\n";
 	$email_body .= "Details " . $details . "\n";
-	echo $email_body;
-	echo "</pre>";
+	
 
 	//To do : send email
+    $mail->setFrom('jezzamon@backinthenow.space', 'Mailer');
+//    $mail->addAddress('joe@example.net', 'Joe User');     // Add a recipient
+    $mail->addAddress('jezzamondev@gmail.com');               // Name is optional
+//    $mail->addReplyTo('info@example.com', 'Information');
+//    $mail->addCC('cc@example.com');
+//    $mail->addBCC('bcc@example.com');
+
+//    $mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
+//    $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
+    $mail->isHTML(true);                                  // Set email format to HTML
+
+    $mail->Subject = 'Suggestions from ' .$name;
+    $mail->Body    = $email_body; 'Here is an email test!!';
+//    $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+
+    if(!$mail->send()) {
+        echo 'Message could not be sent.';
+        echo 'Mailer Error: ' . $mail->ErrorInfo;
+        exit;
+    } 
+    
+    //go to thank you message 
 	header("location:thanks.php");
 }
    
@@ -54,11 +85,14 @@ $section = "suggest";
 include("inc/header.php");
 ?>
 	
+	
+<!-- ************************************************************************************** -->
 <div class="section page">
 	<div class="wrapper">
 		<h1>Suggest a media item</h1>
 		<p>If you think there is something missing, let me know! Complete form to send email.</p>
-		<form method="post" action="suggest.php"> <!-- post the form back to own page -->
+		<!-- post the form back to own page --> 
+		<form method="post" action="suggest.php"> 
 			<table>
 				<tr>
 					<th><label for="name">Name </label></th>
