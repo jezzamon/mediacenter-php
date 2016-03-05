@@ -1,8 +1,13 @@
 <?php 
+
+// All info submitted from this page will be POSTED back to this page to process then sent to location:thanks.php
+
+//is request method "POST" ?
 if  ($_SERVER["REQUEST_METHOD"] == "POST") {
- //trim whitespace before and after before saving post as variable
-//use filter_input (type, name, type of filter)
+    //trim whitespace before and after before saving post as variable
+    //use filter_input (type, name, type of filter)
 	
+    //replace this with filter_input   $name = $_POST["name"];  //<input type="input" name="name">
     $name = trim(filter_input(INPUT_POST,"name", FILTER_SANITIZE_STRING));
     $email = trim(filter_input(INPUT_POST,"email", FILTER_SANITIZE_EMAIL));
     $details = trim(filter_input(INPUT_POST,"details", FILTER_SANITIZE_SPECIAL_CHARS));
