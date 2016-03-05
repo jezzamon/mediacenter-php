@@ -23,6 +23,19 @@ if  ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "bad form input";
         exit;
 	}
+    
+    //require phpmailer
+    require("inc/phpmailer/class.phpmailer.php");
+    
+    $mail = new PHPMailer;
+    
+    //ValidateAddress() returns true or false
+        //check if ValidateAddress is NOT(!) true 
+    if (!$mail->ValidateAddress($email)) {
+        echo "Invalid Email Address";
+        exit;
+    }
+    
 	echo "<pre>";
 	$email_body = "";
 	$email_body .= "Name " . $name . "\n";
