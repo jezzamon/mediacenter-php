@@ -10,12 +10,17 @@ if  ($_SERVER["REQUEST_METHOD"] == "POST") {
     //replace this with filter_input   $name = $_POST["name"];  //<input type="input" name="name">
     $name = trim(filter_input(INPUT_POST,"name", FILTER_SANITIZE_STRING));
     $email = trim(filter_input(INPUT_POST,"email", FILTER_SANITIZE_EMAIL));
+    $category = trim(filter_input(INPUT_POST, "category", FILTER_SANITZE_STRING));
+    $title = trim(filter_input(INPUT_POST, "title", FILTER_SANITZE_STRING));
+    $format = trim(filter_input(INPUT_POST, "format", FILTER_SANITZE_STRING));
+    $genre = trim(filter_input(INPUT_POST, "genre", FILTER_SANITZE_STRING));
+    $year = trim(filter_input(INPUT_POST, "year", FILTER_SANITZE_STRING));
     $details = trim(filter_input(INPUT_POST,"details", FILTER_SANITIZE_SPECIAL_CHARS));
 
     //validation of forms
-    if ($name == "" || $email == "" || $details = "") {
-	    echo 'Please fill in the required names: Name, email, and details';
-	    exit;
+    if ($name == "" || $email == "" || $category = "" || $title = "") {
+	    $error_message =  'Please fill in the required names: Name, email, category and title';
+	    
     }
 	
     //honeypot for bots spam
@@ -52,6 +57,12 @@ if  ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$email_body = "";
 	$email_body .= "Name " . $name . "\n";
 	$email_body .= "Email " . $email . "\n";
+	$email_body .= "Suggested item\n";
+    $email_body .= "Category " . $category . "\n";
+    $email_body .= "Title " . $title. "\n";
+    $email_body .= "Format " . $format . "\n";
+    $email_body .= "Genre " . $genre . "\n";
+    $email_body .= "Year " . $year . "\n";
 	$email_body .= "Details " . $details . "\n";
 	
 
@@ -97,17 +108,17 @@ include("inc/header.php");
 		<form method="post" action="suggest.php"> 
 			<table>
 				<tr>
-					<th><label for="name">Name </label></th>
+					<th><label for="name">Name (required)</label></th>
 					<td><input type="text" id="name" name="name"></td>
 					
 				</tr>
 				<tr>
-					<th><label for="email">Email </label></th>
+					<th><label for="email">Email (required)</label></th>
 					<td><input type="text" id="email" name="email"></td>
 					
 				</tr>
 				<tr>
-					<th><label for="category">Category </label></th>
+					<th><label for="category">Category (required)</label></th>
                     <td><select id="category" name="category">
                             <option value="">Select One</option>
                             <option value="Books">Book</option>
@@ -117,7 +128,7 @@ include("inc/header.php");
                     </td>
 				</tr>
 				<tr>
-					<th><label for="title">Title</label></th>
+					<th><label for="title">Title (required)</label></th>
 					<td><input type="text" id="title" name="title"></td>
 					
 				</tr>
