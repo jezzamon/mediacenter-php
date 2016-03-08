@@ -25,9 +25,10 @@ if  ($_SERVER["REQUEST_METHOD"] == "POST") {
 	
     //honeypot for bots spam
     if ($_POST["address"] !== "") {
-        echo "bad form input";
-        exit;
+       $error_message =  "bad form input";
 	}
+    
+    
     
     //require 3rd party phpmailer, smtp
     
@@ -53,44 +54,53 @@ if  ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
     
-	
-	$email_body = "";
-	$email_body .= "Name " . $name . "\n";
-	$email_body .= "Email " . $email . "\n";
-	$email_body .= "Suggested item\n";
-    $email_body .= "Category " . $category . "\n";
-    $email_body .= "Title " . $title. "\n";
-    $email_body .= "Format " . $format . "\n";
-    $email_body .= "Genre " . $genre . "\n";
-    $email_body .= "Year " . $year . "\n";
-	$email_body .= "Details " . $details . "\n";
-	
+    //if there is no $error_message set continue with email
+    if (!isset($error_message)) {
+        $email_body = "";
+        $email_body .= "Name " . $name . "\n";
+        $email_body .= "Email " . $email . "\n";
+        $email_body .= "Suggested item\n";
+        $email_body .= "Category " . $category . "\n";
+        $email_body .= "Title " . $title. "\n";
+        $email_body .= "Format " . $format . "\n";
+        $email_body .= "Genre " . $genre . "\n";
+        $email_body .= "Year " . $year . "\n";
+        $email_body .= "Details " . $details . "\n";
+    
+        $mail->setFrom('jezzamon@backinthenow.space', 'Mailer');
+        $mail->addAddress('jezzamondev@gmail.com');               // Name is optional
+        $mail->isHTML(false);                                  // Set email format to HTML
+
+        $mail->Subject = 'Suggestions from ' .$name;
+        $mail->Body    = $email_body;
+
+
+        if($mail->send()) {
+           header("location:thanks.php?status=thanks");    
+        exit;
+        }
+        $error_message =  'Message could not be sent.';
+        $error_message .= 'Mailer Error: ' . $mail->ErrorInfo;
+
+    }
+    
+}	
+		
 
 	//To do : send email
-    $mail->setFrom('jezzamon@backinthenow.space', 'Mailer');
 //    $mail->addAddress('joe@example.net', 'Joe User');     // Add a recipient
-    $mail->addAddress('jezzamondev@gmail.com');               // Name is optional
+//    $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 //    $mail->addReplyTo('info@example.com', 'Information');
 //    $mail->addCC('cc@example.com');
 //    $mail->addBCC('bcc@example.com');
 
 //    $mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
 //    $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
-    $mail->isHTML(true);                                  // Set email format to HTML
 
-    $mail->Subject = 'Suggestions from ' .$name;
-    $mail->Body    = $email_body;
-//    $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
-    if(!$mail->send()) {
-        echo 'Message could not be sent.';
-        echo 'Mailer Error: ' . $mail->ErrorInfo;
-        exit;
-    } 
-    
     //go to thank you message 
-	header("location:thanks.php");
-}
+	
+
    
 $pageTitle = "Suggest a media item";
 $section = "suggest";
