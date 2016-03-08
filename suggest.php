@@ -23,8 +23,10 @@ if  ($_SERVER["REQUEST_METHOD"] == "POST") {
 	    
     }
 	
-    //honeypot for bots spam
-    if ($_POST["address"] !== "") {
+    //honeypot for bots spam 
+        //if address field is not blank AND there is no error_message var set
+    
+        if (!isset($error_message) && $_POST["address"] !== "") {
        $error_message =  "bad form input";
 	}
     
@@ -48,8 +50,8 @@ if  ($_SERVER["REQUEST_METHOD"] == "POST") {
     $mail->Port = 587;  
  
     //ValidateAddress() returns true or false
-        //check if ValidateAddress is NOT(!) true 
-    if (!$mail->ValidateAddress($email)) {
+        //check if ValidateAddress is NOT(!) true AND error_message var not set yet 
+    if (!isset($error_message) && !$mail->ValidateAddress($email)) {
         $error_message =  "Invalid Email Address";
     }
     
