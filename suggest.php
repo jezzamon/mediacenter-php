@@ -50,8 +50,7 @@ if  ($_SERVER["REQUEST_METHOD"] == "POST") {
     //ValidateAddress() returns true or false
         //check if ValidateAddress is NOT(!) true 
     if (!$mail->ValidateAddress($email)) {
-        echo "Invalid Email Address";
-        exit;
+        $error_message =  "Invalid Email Address";
     }
     
     //if there is no $error_message set continue with email
@@ -113,8 +112,17 @@ include("inc/header.php");
 <div class="section page">
 	<div class="wrapper">
 		<h1>Suggest a media item</h1>
-		<p>If you think there is something missing, let me know! Complete form to send email.</p>
+		
 		<!-- post the form back to own page --> 
+		
+        <?php 
+            if (isset($error_message)) {
+            echo "<p class='message'>" . $error_message . "</p>";
+            } else {
+             echo "<p>If you think there is something missing, let me know! Complete form to send email.</p>";
+            }
+        ?>
+        
 		<form method="post" action="suggest.php"> 
 			<table>
 				<tr>
