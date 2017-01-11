@@ -1,4 +1,4 @@
 # mediacenter-php
 
-##Media center exampe with php
+##Media center example with php
 Using OOP practices with PHP.
